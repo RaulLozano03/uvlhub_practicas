@@ -48,11 +48,19 @@ jobs:
           pip install -r requirements.txt
           pip install -e ./rosemary
           pip install pip-audit
+          pip install flake8
+
       - name: Check outdated dependencies
         run: pip list --outdated
+
+      - name: Lint Python code
+        run: flake8 app/
+        continue-on-error: true
+
       - name: Audit dependencies
         run: pip-audit
         continue-on-error: true
+
       - name: Run tests with coverage
         run: |
           coverage run -m pytest app/features/ --ignore-glob='*selenium*'
